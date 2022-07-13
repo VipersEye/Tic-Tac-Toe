@@ -12,6 +12,86 @@
 </head>
 <body>
 
+    <div class="content">
+        <form class="settings">
+
+            <h2 class="settings__header">settings</h2>
+
+            <div class="settings__block">
+                <div class="settings__item">
+                    <p class="settings__text">Choose opponent</p>
+                    <div class="settings__options">
+                        <input class="input input_opponent input_opponent_player" type="radio" name="enemy" id="enemy-player" value="player" checked>
+                        <input class="input input_opponent input_opponent_computer" type="radio" name="enemy" id="enemy-computer" value="computer">
+                    </div> 
+                </div>
+
+                <div class="settings__item">
+                    <label class="settings__text" for="rounds">Best of</label>
+                    <div class="input_rounds-container">
+                        <input class="input input_rounds" type="number" name="rounds" id="rounds" value="1" step="1">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="settings__block">
+                <h3 class="settings__item-header">player 1</h3>
+
+                <div class="settings__item">
+                    <label class="settings__text" for="name-player1">Name</label>
+                    <input class="input input_name" type="text" name="player1-name" id="player1-name" placeholder="player 1">
+                </div>
+
+                <div class="settings__item">
+                    <p class="settings__text">Choose symbol</p>
+                    <div class="settings__options">
+                        <input class="input input_symbol input_symbol_x" type="radio" name="player1-symbol" id="player1-symbol" value="x" checked>
+                        <input class="input input_symbol input_symbol_o" type="radio" name="player1-symbol" id="player1-symbol" value="o">
+                    </div>
+                </div>
+                
+                <div class="settings__item">
+                    <label class="settings__text" for="player1-color">Color</label>
+                    <input class="input input_color" type="color" name="player1-color" id="player1-color" value="#ea1a4b">
+                </div>
+            
+            </div>
+
+            <div class="settings__block">
+                <h3 class="settings__item-header">player 2</h3>
+
+                <div class="settings__item">
+                    <label class="settings__text" for="name-player2">Name</label>
+                    <input class="input input_name" type="text" name="player2-name" id="player2-name" placeholder="player 2">
+                </div>
+
+                <div class="settings__item">
+                    <p class="settings__text">Choose symbol</p>
+                    <div class="settings__options">
+                        <input class="input input_symbol input_symbol_x" type="radio" name="player2-symbol" id="player2-symbol" value="x">
+                        <input class="input input_symbol input_symbol_o" type="radio" name="player2-symbol" id="player2-symbol" value="o" checked>
+                    </div>
+                </div>
+                
+                <div class="settings__item">
+                    <label class="settings__text" for="player2-color">Color</label>
+                    <input class="input input_color" type="color" name="player2-color" id="player2-color" value="#3fe1c9">
+                </div>
+            
+            </div>
+
+
+            <div class="settings__buttons">
+                <button class="settings__btn settings__btn_apply" type="button">Apply</button>
+                <button class="settings__btn settings__btn_default" type="button">Default</button>
+                <button class="settings__btn settings__btn_cancel" type="button">Cancel</button>
+            </div>
+
+        </form>
+
+        <div class="settings__colors"></div>
+    </div>
+
     <script src="./script.js"></script>
     
 </body>
