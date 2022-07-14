@@ -2,6 +2,8 @@
 
 :root {
     --text-color: #fbd12f;
+    --color-p1: #fbd12f;
+    --color-p2: #fbd12f;
 }
 
 *, *::before, *::after {
@@ -24,34 +26,125 @@ h1, h2, h3, h4, h5, h6 {
 .content {
     position: relative;
 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
     width: 100vw;
     height: 100vh;
 
     background-color: #1b1e51;
 }
 
-/* Settings ========================== */
+/* Header ============================ */
 
+.header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.header__title {
+    margin-bottom: 2rem;
+    
+    font-size: 5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+/* game ======================== */
+
+.game, 
 .settings {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    z-index: 1;
-
     padding: 2rem 3rem;
     width: 50vw;
     height: 100vh;
 
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-
-    font-size: 1.7rem;
-    color: var(--text-color);
+    justify-content: center;
 
     background-color: #202478;
     border: 2rem solid #6647c6;
     border-radius: 4rem;
+}
+
+.game__info {
+    margin-bottom: 3rem;
+
+    font-size: 3rem;
+    text-align: center;
+}
+
+.game__best-of {
+    margin-bottom: 2rem;
+
+    text-transform: uppercase;
+}
+
+.game__user-name {
+    font-size: 3rem;
+}
+
+.game__user-name_p1 {
+    margin-right: 2rem;
+    
+    color: var(--color-p1);
+}
+
+.game__user-name_p2 {
+    margin-left: 2rem;
+    
+    color: var(--color-p2);
+}
+
+.game__score {
+    font-size: 3rem;
+}
+
+.game__score_p1 {
+    color: var(--color-p1);
+}
+
+.game__score_p2 {
+    color: var(--color-p2);
+}
+
+.game__gameboard {
+    margin: 0 auto;
+    padding: 2rem;
+    width: min-content;
+
+    display: grid;
+    grid-template-columns: repeat(3, 11rem);
+    grid-auto-rows: 11rem;
+    gap: 1rem;
+
+    background-color: #6648c3;
+    border-radius: 4rem;
+}
+
+.gameboard__cell {
+    background-color: #1b1e51;
+    border-radius: 2rem;
+}
+
+/* Settings ========================== */
+
+.settings {
+    opacity: 0;
+    visibility: hidden;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 1;
+
+    justify-content: space-between;
+
+    font-size: 1.7rem;
+    color: var(--text-color);
 
     transform: translate3d(-50%, -50%, 0);
 }
