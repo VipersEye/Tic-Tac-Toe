@@ -52,7 +52,11 @@
                 
                 <div class="settings__item">
                     <label class="settings__text" for="player1-color">Color</label>
-                    <input class="input input_color" type="color" name="player1-color" id="player1-color" value="#ea1a4b">
+                    <div class="settings__colors">
+                        <div class="input_color-container">
+                            <input class="input input_color" type="color" name="player1-color" id="player1-color" value="#ea1a4b">
+                        </div>
+                    </div>
                 </div>
             
             </div>
@@ -75,7 +79,11 @@
                 
                 <div class="settings__item">
                     <label class="settings__text" for="player2-color">Color</label>
-                    <input class="input input_color" type="color" name="player2-color" id="player2-color" value="#3fe1c9">
+                    <div class="settings__colors">
+                        <div class="input_color-container">
+                            <input class="input input_color" type="color" name="player2-color" id="player2-color" value="#ea1a4b">
+                        </div>
+                    </div>
                 </div>
             
             </div>
@@ -89,8 +97,21 @@
 
         </form>
 
-        <div class="settings__colors"></div>
     </div>
+
+    <template id="template-palette">
+        <div class="settings__colors-palette">
+            <div class="settings__colors-cell" style="background-color: #d70622;"></div>    
+            <div class="settings__colors-cell" style="background-color: #fbd12f;"></div>    
+            <div class="settings__colors-cell" style="background-color: #d67600;"></div>    
+            <div class="settings__colors-cell" style="background-color: #00dbd8;"></div>    
+            <div class="settings__colors-cell" style="background-color: #1fff06;"></div>    
+            <div class="settings__colors-cell" style="background-color: #551b1b;"></div>    
+            <div class="settings__colors-cell" style="background-color: #d700ba;"></div>    
+            <div class="settings__colors-cell" style="background-color: #ff6e6e;"></div>    
+            <div class="settings__colors-cell" style="background-color: #3e5717;"></div>      
+        </div>
+    </template>
 
     <script src="./script.js"></script>
     

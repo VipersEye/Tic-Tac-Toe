@@ -1,0 +1,403 @@
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&family=Roboto:wght@100;300;400;500;700&display=swap');
+
+:root {
+    --text-color: #fbd12f;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+
+    font-family: 'Comfortaa', cursive;
+    font-size: 1rem;
+    color: var(--text-color);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+    padding: 0;
+}
+
+.content {
+    position: relative;
+
+    width: 100vw;
+    height: 100vh;
+
+    background-color: #1b1e51;
+}
+
+/* Settings ========================== */
+
+.settings {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 1;
+
+    padding: 2rem 3rem;
+    width: 50vw;
+    height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    font-size: 1.7rem;
+    color: var(--text-color);
+
+    background-color: #202478;
+    border: 2rem solid #6647c6;
+    border-radius: 4rem;
+
+    transform: translate3d(-50%, -50%, 0);
+}
+
+.settings__header {
+    margin-bottom: 1rem;
+
+    font-size: 3rem;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.settings__block {
+    margin-bottom: 2rem;
+}
+
+.settings__item-header {
+    margin-bottom: 1.5rem;
+
+    font-size: 2.5rem;
+    text-align: center;
+    text-transform: capitalize;
+}
+
+.settings__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.settings__text {
+    margin: 0;
+    padding: 0.8rem 0;
+}
+
+.settings__options {
+    display: flex;
+}
+
+.input {    
+    appearance: none;
+
+    margin: 0;
+    padding: 0;
+
+    font-family: inherit;
+    font-size: inherit;
+}
+
+.input_opponent::after {    
+    display: block;
+
+    padding: 0.5rem 0;
+    width: 11.8rem;
+
+    text-align: center;
+    font-size: 1.3rem;
+    color: var(--text-color);
+
+    background-color: transparent;
+    border: 0.3rem solid var(--text-color);
+    cursor: pointer;
+
+    transition: background 0.2s ease-out, color 0.2s ease-out;
+}
+
+.input_opponent:hover::after {
+    color: #000;
+}
+
+.input_opponent:checked::after {
+    color: #000;
+    background-color: var(--text-color);
+}
+
+.input_opponent:checked:hover::after {
+    background-color: #f5c506;
+    border-color: #f5c506;
+}
+
+.input_opponent:disabled::after {
+    color: #797979;
+    background-color: transparent;
+    border-color: #797979;
+}
+
+.input_opponent_player::after {
+    content: 'player';
+
+    border-top-left-radius: 0.3rem;
+    border-bottom-left-radius: 0.3rem;
+    border-right-width: 0.15rem;
+}
+
+.input_opponent_computer::after {
+    content: 'computer';
+
+    border-top-right-radius: 0.3rem;
+    border-bottom-right-radius: 0.3rem;
+    border-left-width: 0.15rem;
+}
+
+.input_rounds-container {
+    display: flex;
+    align-items: center;
+}
+
+.input_rounds {
+    padding: 0.3rem 0;
+    width: 3rem;
+
+    font-weight: 700;
+    text-align: center;
+    color: var(--text-color);
+
+    border: none;
+    background-color: transparent;
+}
+
+.input_rounds::-webkit-outer-spin-button,
+.input_rounds::-webkit-inner-spin-button {
+    display: none;
+}
+
+.input_rounds-container::before,
+.input_rounds-container::after {
+    content: '';
+    display: block;
+    width: 1.5rem;
+    height: 1.5rem;
+
+    background-color: var(--text-color);
+
+    cursor: pointer;
+
+    transition: background 0.2s ease-out;
+}
+
+.input_rounds-container:hover::before,
+.input_rounds-container:hover::after {
+    background-color: #f5c506;
+}
+
+.input_rounds-container::before {
+    clip-path: polygon(0 50%, 100% 100%, 100% 0);
+}
+
+.input_rounds-container::after {
+    clip-path: polygon(0 100%, 100% 50%, 0 0);
+}
+
+.input_name {
+    padding: 0.3rem 0;
+    width: 25%;
+    
+    color: var(--text-color);
+    text-align: right;
+
+    border: none;
+    border-bottom: 0.2rem solid #797979;
+    border-radius: 0.1rem;
+    background-color: transparent;
+
+    outline: none;
+
+    transition: border-color 0.2s ease-out;
+}
+
+.input_name:focus {
+    border-color: var(--text-color);
+}
+
+.input_symbol::after {
+    display: block;
+    margin: 0 0.3rem;
+
+    font-size: 4rem;
+    font-weight: 700;
+    color: #000;
+    cursor: pointer;
+
+    background-color: transparent;
+
+    transition: color 0.2s ease-out;
+}
+
+.input_symbol:hover::after {
+    color: #1b1b1b;
+}
+
+.input_symbol:checked:after {
+    color: var(--text-color);
+}
+
+.input_symbol:checked:hover::after {
+    color: #f5c506;
+}
+
+.input_symbol:disabled::after {
+    color: #797979;
+}
+
+.input_symbol_x::after {
+    content: 'x';
+}
+
+.input_symbol_o::after {
+    content: 'o';
+}
+
+.input_color-container {
+    position: relative;
+
+    margin-right: 2rem;
+    width: 2rem;
+    height: 2rem;
+
+    overflow: hidden;
+}
+
+.input_color {
+    appearance: none;
+    
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    margin: 0;
+    padding: 0;
+    width: 5rem;
+    height: 5rem;
+
+    cursor: pointer;
+
+    transform: translate3d(-50%, -50%, 0);
+}
+
+.settings__buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.settings__btn {
+    appearance: none;
+
+    padding: 0.5rem 0;
+    width: 9rem;
+
+    font-family: inherit;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #000;
+    text-transform: capitalize;
+    text-align: center;
+
+    border: none;
+    border-radius: 0.3rem; 
+    background-color: transparent;
+
+    cursor: pointer;
+
+    transition: background-color 0.2s ease-in-out;
+}
+
+.settings__btn_apply {
+    background-color: #36d005;
+}
+
+.settings__btn_apply:hover {
+    background-color: #2ab500;
+}
+
+.settings__btn_apply:active {
+    background-color: #259b01;
+}
+
+.settings__btn_default {
+    background-color: var(--text-color);
+}
+
+.settings__btn_default:hover {
+    background-color: #f5c506;
+}
+
+.settings__btn_default:active {
+    background-color: #cea603;
+}
+
+.settings__btn_cancel {
+    background-color: #e90625;
+}
+
+.settings__btn_cancel:hover {
+    background-color: #d70622;
+} 
+
+.settings__btn_cancel:active {
+    background-color: #b7041c;
+}
+
+.settings__colors {
+    position: relative;
+}
+
+.settings__colors-palette {
+    position: absolute;
+    top: -1rem;
+    left: 100%;
+    z-index: 1000;
+
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    gap: 0.2rem;
+
+    padding: 1.2rem;
+    width: min-content;
+
+    border-radius: 1rem;
+    background-color: #120038;
+}
+
+.settings__colors-palette::before {
+    content: '';
+
+    position: absolute;
+    top: 1rem;
+    right: 100%;
+
+    display: block;
+    width: 2rem;
+    height: 2rem;
+
+    background-color: inherit;
+
+    clip-path: polygon(100% 100%, 100% 0, 0 50%);
+}
+
+.settings__colors-cell {
+    width: 2.5rem;
+    height: 2.5rem;
+
+    transition: transform 0.35s ease-in-out;
+}
+
+.settings__colors-cell:hover {
+    transform: scale(1.5);
+}
