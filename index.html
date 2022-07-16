@@ -35,7 +35,7 @@
             </button>
 
             <div class="game__info">
-                <div class="game__best-of">best of <span id="rounds">12</span></div>
+                <div class="game__best-of">best of <span id="rounds">3</span></div>
                 <span class="game__user-name game__user-name_p1" id="p1-name">Player1</span>
                 <span class="game__score game__score_p1" id="p1-score">0</span>
                 :
@@ -63,7 +63,7 @@
             <div class="settings__block">
                 <div class="settings__item">
                     <p class="settings__text">Choose opponent</p>
-                    <div class="settings__options">
+                    <div class="settings__options settings__options_opponent">
                         <input class="input input_opponent input_opponent_player" type="radio" name="enemy" id="input-enemy-player" value="player" checked>
                         <input class="input input_opponent input_opponent_computer" type="radio" name="enemy" id="input-enemy-computer" value="computer">
                     </div> 
@@ -72,7 +72,9 @@
                 <div class="settings__item">
                     <label class="settings__text" for="input-rounds">Best of</label>
                     <div class="input_rounds-container">
-                        <input class="input input_rounds" type="number" name="rounds" id="input-rounds" value="1" step="1">
+                        <button type="button" class="input_rounds-btn input_rounds-btn_inc"></button>
+                        <input class="input input_rounds" type="number" name="rounds" id="input-rounds" value="3" step="1" disabled min="1" max="9">
+                        <button type="button" class="input_rounds-btn input_rounds-btn_dec"></button>
                     </div>
                 </div>
             </div> <!-- settings block -->
@@ -88,8 +90,8 @@
                 <div class="settings__item">
                     <p class="settings__text">Choose symbol</p>
                     <div class="settings__options">
-                        <input class="input input_symbol input_symbol_x" type="radio" name="p1-symbol" id="input-p1-symbol" value="x" checked>
-                        <input class="input input_symbol input_symbol_o" type="radio" name="p1-symbol" id="input-p1-symbol" value="o">
+                        <input class="input input_symbol input_symbol_x" type="radio" name="p1-symbol" id="input-p1-symbol-x" value="x" checked>
+                        <input class="input input_symbol input_symbol_o" type="radio" name="p1-symbol" id="input-p1-symbol-o" value="o">
                     </div>
                 </div>
                 
@@ -115,8 +117,8 @@
                 <div class="settings__item">
                     <p class="settings__text">Choose symbol</p>
                     <div class="settings__options">
-                        <input class="input input_symbol input_symbol_x" type="radio" name="p2-symbol" id="input-p2-symbol" value="x">
-                        <input class="input input_symbol input_symbol_o" type="radio" name="p2-symbol" id="input-p2-symbol" value="o" checked>
+                        <input class="input input_symbol input_symbol_x" type="radio" name="p2-symbol" id="input-p2-symbol-x" value="x">
+                        <input class="input input_symbol input_symbol_o" type="radio" name="p2-symbol" id="input-p2-symbol-o" value="o" checked>
                     </div>
                 </div>
                 
@@ -124,7 +126,7 @@
                     <label class="settings__text" for="input-p2-color">Color</label>
                     <div class="settings__colors">
                         <div class="input_color-container">
-                            <input class="input input_color" type="color" name="p2-color" id="input-p2-color" value="#ea1a4b">
+                            <input class="input input_color" type="color" name="p2-color" id="input-p2-color" value="#fbd12f">
                         </div>
                     </div>
                 </div>
@@ -135,7 +137,7 @@
             <div class="settings__buttons">
                 <button class="settings__btn settings__btn_apply" type="button">Apply</button>
                 <button class="settings__btn settings__btn_default" type="button">Default</button>
-                <button class="settings__btn settings__btn_cancel" type="button">Cancel</button>
+                <button class="settings__btn settings__btn_cancel" type="button">Close</button>
             </div>
 
         </form>

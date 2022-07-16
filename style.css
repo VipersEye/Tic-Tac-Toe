@@ -195,6 +195,12 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--text-color);
 
     transform: translate3d(-50%, -50%, 0);
+    transition: opacity 0.2s linear;
+}
+
+.settings_active {
+    opacity: 1;
+    visibility: visible;
 }
 
 .settings__header {
@@ -317,13 +323,15 @@ h1, h2, h3, h4, h5, h6 {
     display: none;
 }
 
-.input_rounds-container::before,
-.input_rounds-container::after {
-    content: '';
-    display: block;
+.input_rounds-btn {
+    appearance: none;
+    
+    margin: 0;
+    padding: 0;
     width: 1.5rem;
     height: 1.5rem;
 
+    border: none;
     background-color: var(--text-color);
 
     cursor: pointer;
@@ -331,16 +339,19 @@ h1, h2, h3, h4, h5, h6 {
     transition: background 0.2s ease-out;
 }
 
-.input_rounds-container:hover::before,
-.input_rounds-container:hover::after {
+.input_rounds-btn:hover {
     background-color: #f5c506;
 }
 
-.input_rounds-container::before {
+.input_rounds-btn:active {
+    background-color: #cea603;
+}
+
+.input_rounds-btn_inc {
     clip-path: polygon(0 50%, 100% 100%, 100% 0);
 }
 
-.input_rounds-container::after {
+.input_rounds-btn_dec {
     clip-path: polygon(0 100%, 100% 50%, 0 0);
 }
 
@@ -359,6 +370,10 @@ h1, h2, h3, h4, h5, h6 {
     outline: none;
 
     transition: border-color 0.2s ease-out;
+}
+
+.input_name:disabled {
+    color: #797979;
 }
 
 .input_name:focus {
