@@ -347,11 +347,11 @@ h1, h2, h3, h4, h5, h6 {
     background-color: #cea603;
 }
 
-.input_rounds-btn_inc {
+.input_rounds-btn_dec {
     clip-path: polygon(0 50%, 100% 100%, 100% 0);
 }
 
-.input_rounds-btn_dec {
+.input_rounds-btn_inc {
     clip-path: polygon(0 100%, 100% 50%, 0 0);
 }
 
