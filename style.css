@@ -551,9 +551,52 @@ h1, h2, h3, h4, h5, h6 {
     width: 2.5rem;
     height: 2.5rem;
 
+    border: none;
+    cursor: pointer;
+
     transition: transform 0.35s ease-in-out;
 }
 
-.settings__colors-cell:hover {
+.settings__colors-cell_1 {
+    background-color: #d70622;
+}
+
+.settings__colors-cell_2 {
+    background-color: #fbd12f;
+}
+
+.settings__colors-cell_3 {
+    background-color: #d67600;
+}
+
+.settings__colors-cell_4 {
+    background-color: #00dbd8;
+}
+
+.settings__colors-cell_5 {
+    background-color: #1fff06;
+}
+
+.settings__colors-cell_6 {
+    background-color: #551b1b;
+}
+
+.settings__colors-cell_7 {
+    background-color: #d700ba;
+}
+
+.settings__colors-cell_8 {
+    background-color: #ff6e6e;
+}
+
+.settings__colors-cell_9 {
+    background-color: #3e5717;
+}
+
+.settings__colors-cell:disabled {
+    background-color: #797979;
+}
+
+.settings__colors-cell:not(:disabled):hover {
     transform: scale(1.5);
 }
