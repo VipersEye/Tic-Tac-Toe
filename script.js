@@ -94,6 +94,71 @@ const game = (() => {
                 });
             });
 
+            // 
+
+            const createColorPalette = (e) => {
+                let playerColorSettings = e.currentTarget;
+                let playerInputColor = e.target;
+
+                let paletteTemplate = document.querySelector('#template-palette').content.cloneNode(true);
+                let palette = paletteTemplate.querySelector('.settings__colors-palette');
+
+                let opponentColorSettings = Array.from(document.querySelectorAll('.settings__colors')).find( block => block !== e.currentTarget);
+                let opponentInputColor = opponentColorSettings.querySelector('.input_color');
+                let opponentPalette = opponentColorSettings.querySelector('.settings__colors-palette');
+                
+                let disabledCell = palette.querySelector(`.settings__colors-cell[background="${opponentInputColor.value}"]`);
+                disabledCell.disabled = true;
+
+                palette.addEventListener('click', (e) => {
+                    if (e.target.closest('.settings__colors-cell') !== null) {
+                        playerInputColor.value = e.target.getAttribute('background');
+                        opponentPalette = opponentColorSettings.querySelector('.settings__colors-palette');
+                        if (opponentPalette !== null) {
+                            let currentOpponentDisabledCell = opponentPalette.querySelector('.settings__colors-cell[disabled]');
+                            currentOpponentDisabledCell.disabled = false;
+                            let opponentDisabledCell = opponentPalette.querySelector(`.settings__colors-cell[background="${playerInputColor.value}"]`);
+                            opponentDisabledCell.disabled = true;
+                        }
+                    }
+                });
+
+                playerColorSettings.appendChild(palette);
+            };
+
+            const showPlayerPalette = (e) => {
+                let playerColorSettings = e.currentTarget;
+                let palette = playerColorSettings.querySelector('.settings__colors-palette');
+                if (palette === null) {
+                    createColorPalette(e);
+                    palette = playerColorSettings.querySelector('.settings__colors-palette');
+                }
+                palette.classList.add('settings__colors-palette_active');
+            };
+
+            // 
+
+            let playerColors = document.querySelectorAll('.settings__colors');
+            playerColors.forEach(block => {
+                block.addEventListener('click', (e) => {
+                    if (e.target.closest('.input_color') !== null) {
+                        e.preventDefault();
+                        showPlayerPalette(e);
+                    }
+                });
+            });
+
+            // hide pallets when click anywhere outside them 
+
+            document.addEventListener('click', (e) => {
+                if (e.target.closest('.input_color') === null && e.target.closest('.settings__colors-palette') === null) {
+                    let palettes = document.querySelectorAll('.settings__colors-palette');
+                    palettes.forEach(palette => {
+                        palette.classList.remove('settings__colors-palette_active');
+                    });
+                }
+            });
+
         })();
 
         const Player = (name, symbol, color) => {

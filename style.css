@@ -529,6 +529,16 @@ h1, h2, h3, h4, h5, h6 {
 
     border-radius: 1rem;
     background-color: #120038;
+
+    opacity: 0;
+    visibility: hidden;
+
+    transition: opacity 0.2s ease-in-out;
+}
+
+.settings__colors-palette_active {
+    opacity: 1;
+    visibility: visible;
 }
 
 .settings__colors-palette::before {
@@ -558,7 +568,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .settings__colors-cell_1 {
-    background-color: #d70622;
+    background-color: #ea1a4b;
 }
 
 .settings__colors-cell_2 {
