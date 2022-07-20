@@ -1,11 +1,5 @@
 const game = (() => {
 
-    // game board module
-
-    const gameBoard = (() => {
-
-    })();
-
     // settings module
 
     const settings = (() => {
@@ -31,7 +25,7 @@ const game = (() => {
                 symbol: 'o',
                 color: '#fbd12f',
             };
-            firstMove = player1.name;
+            firstMove = player1;
 
             // disabling player 2 name if opponent is computer
 
@@ -106,7 +100,7 @@ const game = (() => {
                 let opponentColorSettings = Array.from(document.querySelectorAll('.settings__colors')).find( block => block !== e.currentTarget);
                 let opponentInputColor = opponentColorSettings.querySelector('.input_color');
                 let opponentPalette = opponentColorSettings.querySelector('.settings__colors-palette');
-                
+
                 let disabledCell = palette.querySelector(`.settings__colors-cell[background="${opponentInputColor.value}"]`);
                 disabledCell.disabled = true;
 
@@ -212,7 +206,7 @@ const game = (() => {
             
             player2 = Player(player2Name, player2Symbol, player2Color);
             
-            firstMove = [player1, player2].find(player => player.symbol === 'x').name;
+            firstMove = [player1, player2].find(player => player.symbol === 'x');
 
             closeOpenSettings();
         };
@@ -224,14 +218,111 @@ const game = (() => {
         return {closeOpenSettings, resetSettings, applySettings, getSettings};
     })();
 
-
     const {closeOpenSettings, resetSettings, applySettings, getSettings} = settings;
+
+    // game board module
+
+    const gameBoard = (() => {
+        let board = [0,0,0,0,0,0,0,0,0];
+
+        const defineCurrentPlayer = () => {
+            let countOfSymbols = board.reduce( (obj, symbol) => {
+                obj[symbol]++;
+                return obj;
+            }, {'x': 0, 'o': 0, '0': 0} );
+            if (countOfSymbols['0'] === 9) return getSettings().firstMove;
+            let players = [getSettings().player1, getSettings().player2];
+            let nextSymbol = countOfSymbols.x === countOfSymbols.o ? 'x' : 'o';
+
+            return players.find( player => player.symbol === nextSymbol);
+        };
+
+        const computerMakeMove = () => {
+            let possibleMoves = [...board].map( (item,i) => item === 0 ? i : '' ).filter( item => item !== '');
+            if (possibleMoves.length === 0) return;
+            let cellNum = possibleMoves[ Math.floor(Math.random() * possibleMoves.length ) ];
+            let cell = document.querySelector(`.gameboard__cell[number="${cellNum}"]`);
+            let computerMove = document.createElement('span');
+            computerMove.classList.add('.gameboard__cell-value');
+            computerMove.textContent = getSettings().player2.symbol;
+            computerMove.style.color = getSettings().player2.color;
+            cell.appendChild(computerMove);
+            board[cellNum] = computerMove.textContent;
+        }
+
+        const playerMakeMove = (e) => {
+            if (board.find( symbol => symbol === 0 ) === undefined || e.target.closest('.gameboard__cell').children.length !== 0) return;
+            let currentPlayer  = defineCurrentPlayer();
+            let cell = e.target;
+            let playerMove = document.createElement('span');
+            playerMove.classList.add('.gameboard__cell-value');
+            playerMove.textContent = currentPlayer.symbol;
+            playerMove.style.color = currentPlayer.color;
+            cell.appendChild(playerMove);
+            board[cell.getAttribute('number')] = playerMove.textContent;
+        };
+
+        const checkWinner = () => {
+
+            let boardSplice = [board.slice(0,3), board.slice(3,6), board.slice(6,9)];
+
+            for (let i = 0; i < 3; i++) {
+            
+                for (let j = 0, start = boardSplice[0][i], res = []; j < 3; j++) {
+                    res.push( j * 3 + i );
+                    if (boardSplice[j][i] !== start || boardSplice[j][i] === 0) break;
+                    if (j === 2) {
+                        if (boardSplice[j][i] === start) return {winner: start, res};
+                    }
+                }
+                
+                for (let j = 0, start = boardSplice[i][0], res = []; j < 3; j++) {
+                    res.push( i * 3 + j );
+                    if (boardSplice[i][j] !== start || boardSplice[i][j] === 0) break;
+                    if (j === 2) {
+                        if (boardSplice[i][j] === start) return {winner: start, res};
+                    }
+                }
+                
+            }
+            
+            for (let i = 0, j = 0, start = boardSplice[0][0], res = []; i < 3; i++, j++) {
+                res.push( i * 3 + j );
+                if (boardSplice[i][j] !== start || boardSplice[i][j] === 0) break;
+                if (i === 2 && j === 2) {
+                    if (boardSplice[i][j] === start) return {winner: start, res};
+                }
+            }
+            
+            for (let i = 0, j = 2, start = boardSplice[0][2], res = []; i < 3; i++, j--) {
+                res.push( i * 3 + j );
+                if (boardSplice[i][j] !== start || boardSplice[i][j] === 0) break;
+                if (i === 2 && j === 0) {
+                    if (boardSplice[i][j] === start) return {winner: start, res};
+                }
+            }
+                
+            if (boardSplice.some(row => row.toString().includes('0'))) return 'not finished';
+            
+            return 'tie';
+        };
+
+        const resetBoard = () => {
+            board = [0,0,0,0,0,0,0,0,0];
+        };
+
+        return {playerMakeMove, computerMakeMove, checkWinner, resetBoard};
+    })();
+
+    
+    const {playerMakeMove, checkWinner, resetBoard} = gameBoard;
         
     const startGame = () => {};
+    const startRound = () => {};
+    const finishGame = () => {};
     const restartGame = () => {};
-    const makeMove = () => {};
     
-    return {startGame, restartGame, closeOpenSettings, resetSettings, applySettings, makeMove, getSettings};
+    return {startGame, restartGame, closeOpenSettings, resetSettings, applySettings, playerMakeMove, checkWinner, getSettings};
 
 })();
 
@@ -251,3 +342,16 @@ btnOpenSettings.addEventListener('click', (e) =>{
 btnCloseSettings.addEventListener('click', game.closeOpenSettings);
 btnSetDefaultSettings.addEventListener('click', game.resetSettings);
 btnApplySettings.addEventListener('click', game.applySettings);
+
+// event listener for game board with delegation for board cells
+
+let gameBoard = document.querySelector('.game__gameboard');
+gameBoard.addEventListener('click', (e) => {
+    if (e.target.closest('.gameboard__cell') !== null) {
+        game.playerMakeMove(e);
+    }
+});
+
+// start game
+
+game.startGame();
