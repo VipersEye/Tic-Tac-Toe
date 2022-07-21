@@ -72,13 +72,12 @@ h1, h2, h3, h4, h5, h6 {
     border-radius: 4rem;
 }
 
-.game__settings-btn {
+.game__settings-btn,
+.game__restart-btn {
     appearance: none;
 
     position: absolute;
-    top: 1rem;
-    left: 1rem;
-
+    
     margin: 0;
     padding: 0;
     width: min-content;
@@ -88,6 +87,12 @@ h1, h2, h3, h4, h5, h6 {
 
     cursor: pointer;
 
+}
+
+.game__settings-btn {
+    top: 1rem;
+    left: 1rem;
+
     transition: 1s transform cubic-bezier(0.175, 0.885, 0.7, 1.7);
 }
 
@@ -96,6 +101,24 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .icon-settings {
+    width: 4rem;
+    height: 4rem;
+
+    fill: var(--text-color);
+}
+
+.game__restart-btn {
+    top: 1rem;
+    right: 1rem;
+
+    transition: transform 1s linear;
+}
+
+.game__restart-btn:hover {
+    transform: rotate(-360deg);
+}
+
+.icon_restart{
     width: 4rem;
     height: 4rem;
 
@@ -168,14 +191,26 @@ h1, h2, h3, h4, h5, h6 {
 
     background-color: #1b1e51;
     border-radius: 2rem;
+
+    transition: background-color 0.2s linear;
 }
 
-.gameboard__cell span {
+.gameboard__cell_winner {
+    background-color: #006000;
+}
+
+.gameboard__cell-value {
     position: relative;
     top: -0.4rem;
     left: -0.1rem;
 
     font-size: 11rem;
+
+    transition: transform 0.25s linear;
+}
+
+.gameboard__cell-value_hidden {
+    transform: scale(0);
 }
 
 /* Settings ========================== */
