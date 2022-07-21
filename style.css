@@ -180,8 +180,7 @@ h1, h2, h3, h4, h5, h6 {
 
     background-color: #6648c3;
     border-radius: 4rem;
-    filter: blur(3px);
-    /* overflow: hidden; */
+    filter: blur(0px);
 
     transition: filter 0.2s linear;
 }
@@ -237,7 +236,7 @@ h1, h2, h3, h4, h5, h6 {
     bottom: 0;
     left: 0;
     right: 0;
-    z-index: 1;
+    z-index: -1;
 }
 
 .game__gameboard-wrapper_active {

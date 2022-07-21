@@ -493,6 +493,17 @@ const game = (() => {
                 clearTimeout(timerId);
             }
         }, 150);
+
+        let gameBoard = document.querySelector('.game__gameboard');
+        gameBoard.classList.add('game__gameboard_end');
+        
+        let wrapper = document.querySelector('.game__gameboard-wrapper');
+        wrapper.classList.add('game__gameboard-wrapper_active');
+
+        let winnerBlock = document.querySelector('.game__winner');
+        let {player1, player2} = getSettings();
+        winnerBlock.textContent = ( player1.score > player2.score ? player1.name : player2.name ) + ' win this game!' ;
+        winnerBlock.classList.add('game__winner_show');
     };
 
     const restartGame = () => {
@@ -501,6 +512,21 @@ const game = (() => {
         player2.score = 0;
 
         hideSymbols();
+
+        let gameBoard = document.querySelector('.game__gameboard');
+        gameBoard.classList.remove('game__gameboard_end');
+        
+        let wrapper = document.querySelector('.game__gameboard-wrapper');
+        wrapper.classList.remove('game__gameboard-wrapper_active');
+
+        let winnerBlock = document.querySelector('.game__winner');
+        winnerBlock.classList.add('game__winner_bottom');
+
+        setTimeout(() => {
+            winnerBlock.classList.remove('game__winner_show');
+            winnerBlock.classList.remove('game__winner_bottom');
+        }, 1000);
+
         setTimeout(startGame, 2000);
     };
 
@@ -555,3 +581,19 @@ restartBtn.addEventListener('click', game.restartGame);
 // start game
 
 game.startGame();
+
+
+
+function toggler2 () {
+    let winner = document.querySelector('.game__winner');
+    winner.classList.toggle('game__winner_bottom');
+}
+
+function toggler3 () {
+    let wrapper = document.querySelector('.game__gameboard-wrapper');
+    wrapper.classList.toggle('game__gameboard-wrapper_active');
+    let gameboard = document.querySelector('.game__gameboard');
+    gameboard.classList.toggle('game__gameboard_end');
+    let winner = document.querySelector('.game__winner');
+    winner.classList.toggle('game__winner_show');
+}
