@@ -16,14 +16,16 @@ const game = (() => {
             opponent = 'player';
             bestOf = 3;
             player1 = {
-                name: 'player1',
+                name: 'Player 1',
                 symbol: 'x',
                 color: '#ea1a4b',
+                score: 0,
             };
             player2 = {
-                name: 'player2',
+                name: 'Player 2',
                 symbol: 'o',
                 color: '#fbd12f',
+                score: 0,
             };
             firstMove = player1;
 
@@ -57,7 +59,6 @@ const game = (() => {
             roundsBlock.addEventListener('click', (e) => {
                 let target = e.target;
                 if (target.closest('.input_rounds-btn_inc') !== null) {
-                    debugger;
                     increaseRounds();
                 } else if (target.closest('.input_rounds-btn_dec') !== null) {
                     decreaseRounds();
@@ -130,7 +131,7 @@ const game = (() => {
                 palette.classList.add('settings__colors-palette_active');
             };
 
-            // 
+            // add event listener to colors block 
 
             let playerColors = document.querySelectorAll('.settings__colors');
             playerColors.forEach(block => {
@@ -155,8 +156,8 @@ const game = (() => {
 
         })();
 
-        const Player = (name, symbol, color) => {
-            return {name, symbol, color};
+        const Player = (name, symbol, color, score = 0) => {
+            return {name, symbol, color, score};
         };
 
         const closeOpenSettings = () => {
@@ -194,13 +195,13 @@ const game = (() => {
             opponent = document.querySelector('.input_opponent:checked').value;
             bestOf = +document.querySelector('.input_rounds').value;
 
-            let player1Name = document.querySelector('#input-p1-name').value || 'player1';
+            let player1Name = document.querySelector('#input-p1-name').value || 'Player 1';
             let player1Symbol = document.querySelector('.input_symbol[name="p1-symbol"]:checked').value;
             let player1Color = document.querySelector('#input-p1-color').value;
 
             player1 = Player(player1Name, player1Symbol, player1Color);
             
-            let player2Name = (opponent === 'player' ? document.querySelector('#input-p2-name').value : 'computer') || 'player2';
+            let player2Name = (opponent === 'player' ? document.querySelector('#input-p2-name').value : 'Computer') || 'Player 2';
             let player2Symbol = document.querySelector('.input_symbol[name="p2-symbol"]:checked').value;
             let player2Color = document.querySelector('#input-p2-color').value;
             
@@ -218,7 +219,7 @@ const game = (() => {
         return {closeOpenSettings, resetSettings, applySettings, getSettings};
     })();
 
-    const {closeOpenSettings, resetSettings, applySettings, getSettings} = settings;
+    const {closeOpenSettings, resetSettings, getSettings} = settings;
 
     // game board module
 
@@ -238,12 +239,14 @@ const game = (() => {
         };
 
         const computerMakeMove = () => {
+            let currentPlayer  = defineCurrentPlayer();
+            if (getSettings().opponent === 'computer' && currentPlayer.name !== 'Computer') return;
             let possibleMoves = [...board].map( (item,i) => item === 0 ? i : '' ).filter( item => item !== '');
             if (possibleMoves.length === 0) return;
             let cellNum = possibleMoves[ Math.floor(Math.random() * possibleMoves.length ) ];
             let cell = document.querySelector(`.gameboard__cell[number="${cellNum}"]`);
             let computerMove = document.createElement('span');
-            computerMove.classList.add('.gameboard__cell-value');
+            computerMove.classList.add('gameboard__cell-value');
             computerMove.textContent = getSettings().player2.symbol;
             computerMove.style.color = getSettings().player2.color;
             cell.appendChild(computerMove);
@@ -253,9 +256,10 @@ const game = (() => {
         const playerMakeMove = (e) => {
             if (board.find( symbol => symbol === 0 ) === undefined || e.target.closest('.gameboard__cell').children.length !== 0) return;
             let currentPlayer  = defineCurrentPlayer();
+            if (getSettings().opponent === 'computer' && currentPlayer.name === 'Computer') return;
             let cell = e.target;
             let playerMove = document.createElement('span');
-            playerMove.classList.add('.gameboard__cell-value');
+            playerMove.classList.add('gameboard__cell-value');
             playerMove.textContent = currentPlayer.symbol;
             playerMove.style.color = currentPlayer.color;
             cell.appendChild(playerMove);
@@ -309,20 +313,211 @@ const game = (() => {
 
         const resetBoard = () => {
             board = [0,0,0,0,0,0,0,0,0];
+            
+            let boardCellsValues = document.querySelectorAll('.gameboard__cell-value');
+            boardCellsValues.forEach( cell => {
+                cell.parentElement.classList.remove('gameboard__cell_winner');
+                cell.remove();
+            });
         };
 
         return {playerMakeMove, computerMakeMove, checkWinner, resetBoard};
     })();
 
     
-    const {playerMakeMove, checkWinner, resetBoard} = gameBoard;
+    const {resetBoard} = gameBoard;
+
+    // create decorator for checkWinner function to call finishRound but keep original function
+
+    const checkWinnerDecorator = (checkWinner) => {
+        return function () {
+            let res = checkWinner();
+            if (res !== 'not finished') {
+                finishRound(res);
+            } else {
+                return res;
+            }
+        }
+    };
+
+    // use checkWinner decorator
+
+    const checkWinner = checkWinnerDecorator(gameBoard.checkWinner);
+
+    // create decorator for computer make move function to set timeout but keep original function
+
+    const computerMakeMoveDecorator = (computerMakeMove) => {
+        return function () {
+            setTimeout(() => {
+                computerMakeMove();
+            }, 700);
+        };
+    }
+
+    // use computer make move decorator
+
+    const computerMakeMove = computerMakeMoveDecorator(gameBoard.computerMakeMove);
+
+    // create decorator for player make move function to unite makeMove player and computer and check winner functions but keep their originals separated
+
+    const playerMakeMoveDecorator = (makeMove) => {
+        return function (e) {
+            makeMove(e);
+            let res = checkWinner();
+            if (getSettings().opponent === 'computer' && res === 'not finished') {
+                computerMakeMove();
+                setTimeout(checkWinner, 720);
+            }
+        }
+    };
+
+    // use player make move decorator
+
+    const playerMakeMove = playerMakeMoveDecorator(gameBoard.playerMakeMove);
+
+
+
+
+    const startRound = () => {
+        resetBoard();
+        if (getSettings().firstMove.name === 'Computer' && getSettings().opponent === 'computer') {
+            setTimeout(computerMakeMove, 700);
+        }
+    };
+
+    const startGame = () => {
+        let {player1, player2, bestOf} = getSettings();
+
+        let player1Name = document.querySelector('#p1-name');
+        player1Name.textContent = player1.name;
+
+        let player1Score = document.querySelector('#p1-score');
+        player1Score.textContent = player1.score;
         
-    const startGame = () => {};
-    const startRound = () => {};
-    const finishGame = () => {};
-    const restartGame = () => {};
+        let player2Name = document.querySelector('#p2-name');
+        player2Name.textContent = player2.name;
+
+        let player2Score = document.querySelector('#p2-score');
+        player2Score.textContent = player2.score;
+
+        let bestOfElement = document.querySelector('#rounds');
+        bestOfElement.textContent = bestOf;
+
+        startRound();
+    };
+
+    const hideSymbols = () => {
+        let timerId = setTimeout(function hider () {
+            boardValue = document.querySelector('.gameboard__cell-value:not(.gameboard__cell-value_hidden)');
+            if (boardValue !== null) {
+                boardValue.classList.add('gameboard__cell-value_hidden');
+                boardValue.parentElement.classList.remove('gameboard__cell_winner');
+                timerId = setTimeout(hider , 200);
+            } else {
+                clearTimeout(timerId);
+            }
+        }, 200);
+    };
+
+    const showRoundWinner = (cells) => {
+        let timerId = setTimeout(function show () {
+            let cell = document.querySelector(`.gameboard__cell[number="${cells.shift()}"]`);
+            if (cell !== null) {
+                cell.classList.add('gameboard__cell_winner');
+                timerId = setTimeout(show, 150);
+            } else {
+                clearTimeout(timerId);
+            }
+        }, 150);
+    };
+
+    const finishRound = (res) => {
+        if (res === 'tie') {
+            setTimeout(hideSymbols, 1700);
+            setTimeout(startRound, 3100);
+            return;
+        }
+
+        let winner = getSettings().player1.symbol === res.winner ? 'player1' : 'player2';
+        let {player1, player2} = getSettings();
+        if (winner === 'player1') {
+            player1.score++;
+        } else {
+            player2.score++;
+        }
+
+        let player1Score = document.querySelector('#p1-score');
+        let player2Score = document.querySelector('#p2-score');
+        player1Score.textContent = player1.score;
+        player2Score.textContent = player2.score;
+
+        showRoundWinner(res.res);
+        
+        let winCon = Math.floor(getSettings().bestOf / 2) + 1;
+        if (player1.score >= winCon) {
+            setTimeout(hideSymbols, 1700);
+            setTimeout(finishGame, 4000);
+        } else if (player2.score >= winCon) {
+            setTimeout(hideSymbols, 1700);
+            setTimeout(finishGame, 4000);
+        } else {
+            setTimeout(hideSymbols, 1500);
+            setTimeout(startRound, 3100);
+        }
+
+    };
+
+    const finishGame = () => {
+        resetBoard();
+        let board = [1,2,1,2,1,2,1,2,1];
+        let numOfCells = 0;
+
+        for (let playerNum of board) {
+            let cell = document.querySelector(`.gameboard__cell[number="${numOfCells}"]`);
+            let player = playerNum === 1 ? getSettings().player1 : getSettings().player2;
+            let symbol = document.createElement('span');
+            symbol.classList.add('gameboard__cell-value');
+            symbol.classList.add('gameboard__cell-value_hidden');
+            symbol.textContent = player.symbol;
+            symbol.style.color = player.color;
+            numOfCells++;
+            cell.appendChild(symbol);
+        }
+
+        let timerId = setTimeout(function showSymbols() {
+            let symbol = document.querySelector('.gameboard__cell-value_hidden.gameboard__cell-value');
+            if (symbol !== null) {
+                symbol.classList.remove('gameboard__cell-value_hidden');
+                setTimeout(showSymbols, 150);
+            } else {
+                clearTimeout(timerId);
+            }
+        }, 150);
+    };
+
+    const restartGame = () => {
+        let {player1, player2} = getSettings();
+        player1.score = 0;
+        player2.score = 0;
+
+        hideSymbols();
+        setTimeout(startGame, 2000);
+    };
+
+    // create decorator for apply settings function, so no need to change original function  
+
+    const applySettingsDecorator = (applySettings) => {
+        return function () {
+            applySettings();
+            startGame();
+        }
+    };
+
+    // use apply settings decorator
+
+    const applySettings = applySettingsDecorator(settings.applySettings);
     
-    return {startGame, restartGame, closeOpenSettings, resetSettings, applySettings, playerMakeMove, checkWinner, getSettings};
+    return {startGame, restartGame, closeOpenSettings, resetSettings, applySettings, playerMakeMove, restartGame};
 
 })();
 
@@ -351,6 +546,11 @@ gameBoard.addEventListener('click', (e) => {
         game.playerMakeMove(e);
     }
 });
+
+// event listener for restart game button
+
+let restartBtn = document.querySelector('.game__restart-btn');
+restartBtn.addEventListener('click', game.restartGame);
 
 // start game
 
