@@ -167,6 +167,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .game__gameboard {
+    position: relative;
+
     margin: 0 auto;
     padding: 2rem;
     width: min-content;
@@ -178,6 +180,68 @@ h1, h2, h3, h4, h5, h6 {
 
     background-color: #6648c3;
     border-radius: 4rem;
+    filter: blur(3px);
+    /* overflow: hidden; */
+
+    transition: filter 0.2s linear;
+}
+
+.game__gameboard_end {
+    filter: blur(3px);
+}
+
+.game__winner {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    z-index: 100;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 2rem;
+    width: auto;
+    height: 5rem;
+
+    font-size: 2rem;
+    color: #000;
+
+    border-radius: 2rem;
+    background-color: var(--text-color);
+    opacity: 0;
+    visibility: hidden;
+
+    transform: translateX(-50%);
+
+    transition: opacity 0.5s linear, top 0.4s linear;
+}
+
+.game__winner_show {
+    left: 50%;
+    top: 50%;
+
+    opacity: 1;
+    visibility: visible;
+}
+
+.game__winner_bottom {
+    top: 80%;
+
+    opacity: 0;
+}
+
+.game__gameboard-wrapper {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+}
+
+.game__gameboard-wrapper_active {
+    z-index: 1;
 }
 
 .gameboard__cell {
