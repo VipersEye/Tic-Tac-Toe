@@ -366,7 +366,7 @@ const game = (() => {
             let res = checkWinner();
             if (getSettings().opponent === 'computer' && res === 'not finished') {
                 computerMakeMove();
-                setTimeout(checkWinner, 720);
+                setTimeout(checkWinner, 720); // computer make move has delay 700 (for human better exp, so checkWinner has delay 720)
             }
         }
     };
@@ -467,10 +467,7 @@ const game = (() => {
         showRoundWinner(res.res);
         
         let winCon = Math.floor(getSettings().bestOf / 2) + 1;
-        if (player1.score >= winCon) {
-            setTimeout(hideSymbols, 1700);
-            setTimeout(finishGame, 4000);
-        } else if (player2.score >= winCon) {
+        if (player1.score >= winCon || player2.score >= winCon) {
             setTimeout(hideSymbols, 1700);
             setTimeout(finishGame, 4000);
         } else {
@@ -489,8 +486,7 @@ const game = (() => {
             let cell = document.querySelector(`.gameboard__cell[number="${numOfCells}"]`);
             let player = playerNum === 1 ? getSettings().player1 : getSettings().player2;
             let symbol = document.createElement('span');
-            symbol.classList.add('gameboard__cell-value');
-            symbol.classList.add('gameboard__cell-value_hidden');
+            symbol.classList.add('gameboard__cell-value', 'gameboard__cell-value_hidden');
             symbol.textContent = player.symbol;
             symbol.style.color = player.color;
             numOfCells++;
@@ -543,7 +539,8 @@ const game = (() => {
         setTimeout(startGame, 2000);
     };
 
-    // create decorator for apply settings function, so no need to change original function  
+    // create decorator for apply settings function to unite apply settings and 
+    // start game functions but not change original function from settings module  
 
     const applySettingsDecorator = (applySettings) => {
         return function () {
@@ -556,7 +553,7 @@ const game = (() => {
 
     const applySettings = applySettingsDecorator(settings.applySettings);
     
-    return {startGame, restartGame, closeOpenSettings, resetSettings, applySettings, playerMakeMove, restartGame};
+    return {startGame, restartGame, closeOpenSettings, resetSettings, applySettings, playerMakeMove};
 
 })();
 
@@ -594,19 +591,3 @@ restartBtn.addEventListener('click', game.restartGame);
 // start game
 
 game.startGame();
-
-
-
-function toggler2 () {
-    let winner = document.querySelector('.game__winner');
-    winner.classList.toggle('game__winner_bottom');
-}
-
-function toggler3 () {
-    let wrapper = document.querySelector('.game__gameboard-wrapper');
-    wrapper.classList.toggle('game__gameboard-wrapper_active');
-    let gameboard = document.querySelector('.game__gameboard');
-    gameboard.classList.toggle('game__gameboard_end');
-    let winner = document.querySelector('.game__winner');
-    winner.classList.toggle('game__winner_show');
-}
