@@ -401,12 +401,14 @@ const game = (() => {
 
         let player1Name = document.querySelector('#p1-name');
         player1Name.textContent = player1.name;
+        player1Name.style.color = player1.color;
 
         let player1Score = document.querySelector('#p1-score');
         player1Score.textContent = player1.score;
         
         let player2Name = document.querySelector('#p2-name');
         player2Name.textContent = player2.name;
+        player2Name.style.color = player2.color;
 
         let player2Score = document.querySelector('#p2-score');
         player2Score.textContent = player2.score;
@@ -445,7 +447,7 @@ const game = (() => {
     const finishRound = (res) => {
         if (res === 'tie') {
             setTimeout(hideSymbols, 1700);
-            setTimeout(startRound, 3100);
+            setTimeout(startRound, 3700);
             return;
         }
 
@@ -473,7 +475,7 @@ const game = (() => {
             setTimeout(finishGame, 4000);
         } else {
             setTimeout(hideSymbols, 1500);
-            setTimeout(startRound, 3100);
+            setTimeout(startRound, 3700);
         }
 
     };
