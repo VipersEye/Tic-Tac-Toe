@@ -380,6 +380,17 @@ const game = (() => {
 
     const startRound = () => {
         resetBoard();
+
+        let gameBoard = document.querySelector('.game__gameboard');
+        gameBoard.classList.remove('game__gameboard_end');
+        
+        let wrapper = document.querySelector('.game__gameboard-wrapper');
+        wrapper.classList.remove('game__gameboard-wrapper_active');
+
+        let winnerBlock = document.querySelector('.game__winner');
+        winnerBlock.classList.remove('game__winner_show');
+        winnerBlock.classList.remove('game__winner_bottom');
+
         if (getSettings().firstMove.name === 'Computer' && getSettings().opponent === 'computer') {
             setTimeout(computerMakeMove, 700);
         }
