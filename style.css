@@ -258,6 +258,10 @@ h1, h2, h3, h4, h5, h6 {
     transition: background-color 0.2s linear;
 }
 
+.gameboard__cell:not(.gameboard__cell_winner):hover {
+    background-color: #2b2f79;
+}
+
 .gameboard__cell_winner {
     background-color: #006000;
 }
