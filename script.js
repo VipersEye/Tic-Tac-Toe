@@ -419,20 +419,23 @@ const game = (() => {
         startRound();
     };
 
-    const hideSymbols = () => {
-        let timerId = setTimeout(function hider () {
-            boardValue = document.querySelector('.gameboard__cell-value:not(.gameboard__cell-value_hidden)');
-            if (boardValue !== null) {
-                boardValue.classList.add('gameboard__cell-value_hidden');
-                boardValue.parentElement.classList.remove('gameboard__cell_winner');
-                timerId = setTimeout(hider , 200);
-            } else {
-                clearTimeout(timerId);
-            }
-        }, 200);
+    const hideSymbols = (delay = 0, resolve = () => null) => {
+        setTimeout(() => {
+            let timerId = setTimeout(function hider () {
+                boardValue = document.querySelector('.gameboard__cell-value:not(.gameboard__cell-value_hidden)');
+                if (boardValue !== null) {
+                    boardValue.classList.add('gameboard__cell-value_hidden');
+                    boardValue.parentElement.classList.remove('gameboard__cell_winner');
+                    timerId = setTimeout(hider , 200);
+                } else {
+                    clearTimeout(timerId);
+                    resolve();
+                }
+            }, 200);
+        }, delay);
     };
 
-    const showRoundWinner = (cells) => {
+    const showRoundWinner = (cells, resolve) => {
         let timerId = setTimeout(function show () {
             let cell = document.querySelector(`.gameboard__cell[number="${cells.shift()}"]`);
             if (cell !== null) {
@@ -440,14 +443,16 @@ const game = (() => {
                 timerId = setTimeout(show, 150);
             } else {
                 clearTimeout(timerId);
+                resolve();
             }
         }, 150);
     };
 
     const finishRound = (res) => {
         if (res === 'tie') {
-            setTimeout(hideSymbols, 1700);
-            setTimeout(startRound, 3700);
+            new Promise(function(resolve, reject){
+                hideSymbols(1000, resolve);
+            }).then( () => startRound() );
             return;
         }
 
@@ -464,17 +469,20 @@ const game = (() => {
         player1Score.textContent = player1.score;
         player2Score.textContent = player2.score;
 
-        showRoundWinner(res.res);
-        
-        let winCon = Math.floor(getSettings().bestOf / 2) + 1;
-        if (player1.score >= winCon || player2.score >= winCon) {
-            setTimeout(hideSymbols, 1700);
-            setTimeout(finishGame, 4000);
-        } else {
-            setTimeout(hideSymbols, 1500);
-            setTimeout(startRound, 3700);
-        }
-
+        new Promise(function(resolve, reject) {
+            showRoundWinner(res.res, resolve);
+        }).then( () => {
+            return new Promise(function(resolve, reject){
+                hideSymbols(1000, resolve);
+            });
+        }).then( () => {
+            let winCon = Math.floor(getSettings().bestOf / 2) + 1;
+            if (player1.score >= winCon || player2.score >= winCon) {
+                setTimeout(finishGame, 1000);
+            } else {
+                startRound();
+            }
+        });
     };
 
     const finishGame = () => {
