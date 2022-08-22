@@ -531,7 +531,7 @@ h1, h2, h3, h4, h5, h6 {
 .input_color-container {
     position: relative;
 
-    margin-right: 2rem;
+    margin-left: 2rem;
     width: 2rem;
     height: 2rem;
 
@@ -627,7 +627,7 @@ h1, h2, h3, h4, h5, h6 {
 .settings__colors-palette {
     position: absolute;
     top: -1rem;
-    left: 100%;
+    right: 100%;
     z-index: 1000;
 
     display: grid;
@@ -656,7 +656,7 @@ h1, h2, h3, h4, h5, h6 {
 
     position: absolute;
     top: 1rem;
-    right: 100%;
+    left: 100%;
 
     display: block;
     width: 2rem;
@@ -664,7 +664,7 @@ h1, h2, h3, h4, h5, h6 {
 
     background-color: inherit;
 
-    clip-path: polygon(100% 100%, 100% 0, 0 50%);
+    clip-path: polygon(0 0, 0% 100%, 100% 50%);
 }
 
 .settings__colors-cell {
