@@ -419,40 +419,42 @@ const game = (() => {
         startRound();
     };
 
-    const hideSymbols = (delay = 0, resolve = () => null) => {
-        setTimeout(() => {
-            let timerId = setTimeout(function hider () {
-                boardValue = document.querySelector('.gameboard__cell-value:not(.gameboard__cell-value_hidden)');
-                if (boardValue !== null) {
-                    boardValue.classList.add('gameboard__cell-value_hidden');
-                    boardValue.parentElement.classList.remove('gameboard__cell_winner');
-                    timerId = setTimeout(hider , 200);
+    const hideSymbols = async (delay = 0) => {
+        await new Promise( (resolve) => {
+            setTimeout(() => {
+                let timerId = setTimeout(function hider () {
+                    boardValue = document.querySelector('.gameboard__cell-value:not(.gameboard__cell-value_hidden)');
+                    if (boardValue !== null) {
+                        boardValue.classList.add('gameboard__cell-value_hidden');
+                        boardValue.parentElement.classList.remove('gameboard__cell_winner');
+                        timerId = setTimeout(hider , 200);
+                    } else {
+                        clearTimeout(timerId);
+                        resolve();
+                    }
+                }, 200);
+            }, delay);
+        });
+    };
+
+    const showRoundWinner = async (cells) => {
+        await new Promise( (resolve) => {
+            let timerId = setTimeout(function show () {
+                let cell = document.querySelector(`.gameboard__cell[number="${cells.shift()}"]`);
+                if (cell !== null) {
+                    cell.classList.add('gameboard__cell_winner');
+                    timerId = setTimeout(show, 150);
                 } else {
                     clearTimeout(timerId);
                     resolve();
                 }
-            }, 200);
-        }, delay);
-    };
-
-    const showRoundWinner = (cells, resolve) => {
-        let timerId = setTimeout(function show () {
-            let cell = document.querySelector(`.gameboard__cell[number="${cells.shift()}"]`);
-            if (cell !== null) {
-                cell.classList.add('gameboard__cell_winner');
-                timerId = setTimeout(show, 150);
-            } else {
-                clearTimeout(timerId);
-                resolve();
-            }
-        }, 150);
+            }, 150);
+        });
     };
 
     const finishRound = (res) => {
         if (res === 'tie') {
-            new Promise(function(resolve, reject){
-                hideSymbols(1000, resolve);
-            }).then( () => startRound() );
+            hideSymbols(1000).then( () => startRound() );
             return;
         }
 
@@ -469,13 +471,10 @@ const game = (() => {
         player1Score.textContent = player1.score;
         player2Score.textContent = player2.score;
 
-        new Promise(function(resolve, reject) {
-            showRoundWinner(res.res, resolve);
-        }).then( () => {
-            return new Promise(function(resolve, reject){
-                hideSymbols(1000, resolve);
-            });
-        }).then( () => {
+
+        showRoundWinner(res.res)
+        .then( () => hideSymbols(1000) )
+        .then( () => {
             let winCon = Math.floor(getSettings().bestOf / 2) + 1;
             if (player1.score >= winCon || player2.score >= winCon) {
                 setTimeout(finishGame, 1000);
@@ -523,7 +522,7 @@ const game = (() => {
         winnerBlock.classList.add('game__winner_show');
     };
 
-    const restartGame = () => {
+    const restartGame = async () => {
         let {player1, player2} = getSettings();
         player1.score = 0;
         player2.score = 0;
@@ -531,20 +530,24 @@ const game = (() => {
         hideSymbols();
 
         let gameBoard = document.querySelector('.game__gameboard');
-        gameBoard.classList.remove('game__gameboard_end');
-        
         let wrapper = document.querySelector('.game__gameboard-wrapper');
-        wrapper.classList.remove('game__gameboard-wrapper_active');
-
         let winnerBlock = document.querySelector('.game__winner');
-        winnerBlock.classList.add('game__winner_bottom');
 
-        setTimeout(() => {
-            winnerBlock.classList.remove('game__winner_show');
-            winnerBlock.classList.remove('game__winner_bottom');
-        }, 1000);
+        await new Promise( (resolve) => {
 
-        setTimeout(startGame, 2000);
+            gameBoard.classList.remove('game__gameboard_end');
+            wrapper.classList.remove('game__gameboard-wrapper_active');
+            winnerBlock.classList.add('game__winner_bottom');
+
+            setTimeout(() => {
+                resolve();
+            }, 2000);
+        } );
+
+        winnerBlock.classList.remove('game__winner_show');
+        winnerBlock.classList.remove('game__winner_bottom');
+
+        startGame();
     };
 
     // create decorator for apply settings function to unite apply settings and 
